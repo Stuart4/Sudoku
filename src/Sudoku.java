@@ -102,7 +102,7 @@ public class Sudoku {
 	int[] getHouse(int row, int column) {
 		row = row / 3 * 3;
 		column = column / 3 * 3;
-		int[] house = new int[9];
+		int[] house = new int[10];
 		for (int i = 0; i < 3; i++) {
 			for (int k = 0; k < 3; k++) {
 				house[i + k * 3] = board[i + row][k + column];
@@ -143,43 +143,38 @@ public class Sudoku {
 
 	public boolean nakedSingles() {
 		boolean changesMade = false;
-		for (int row < this.rows; row++) {
-			for (int column < this.columns; column++) {
+		for (int row = 0; row < this.rows; row++) {
+			for (int column = 0; column < this.columns; column++) {
 				int numbersFound = 0;
-				for (boolean numPresent : candidates(row, columns)) {
+				for (boolean numPresent : candidates(row, column)) {
 					if (numPresent)
 						numbersFound++;
 				}
 				if (numbersFound == 1) {
 					for (int i = 1; i <= 9; i++) {
-						if (candidates(row, column)) {
-							board[row][column] = true;
+						if (candidates(row, column)[i]) {
+							board[row][column] = i;
 							changesMade = true;
 							break;
 						}
 					}
-
 				}
 			}
 		}
+		return changesMade;
 	}
-
 	public boolean isSolved() {
-		boolean solved = true;
 		for (int row = 0; row < 9; row++) {
 			for (int column = 0; column < 9; column++) {
 				if (board[row][column] == 0) {
-					solved = false;
-					break;
-					break;
+					return false;
 				}
 			}
 		}
-		return solved;
+		return true;
 	}
 
 	public void solve() {
 		while (!isSolved() && (nakedSingles() || hiddenSingles()));
-		isSolved = true;
 	}
 }
