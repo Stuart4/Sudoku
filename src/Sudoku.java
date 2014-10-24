@@ -9,7 +9,6 @@ import java.util.Arrays;
 public class Sudoku {
 	//todo private
 	public int[][] board;
-	private boolean isSolved;
 	private int rows, columns;
 
 	public static void main(String[] args) {
@@ -27,17 +26,19 @@ public class Sudoku {
 //	 sudoku[8] = new int[]{8,3,1,      7,9,2,      4,6,5};
 		int[][] sudoku = new int[9][9];
 		sudoku[0] = new int[]{2, 4, 5, 8, 7, 1, 3, 9, 6};
-		sudoku[1] = new int[]{1, 0, 0, 6, 3, 9, 2, 5, 4};
+		sudoku[1] = new int[]{1, 0, 7, 6, 3, 9, 2, 5, 4};
 		sudoku[2] = new int[]{9, 6, 3, 2, 4, 5, 7, 8, 1};
 
 		sudoku[3] = new int[]{3, 2, 4, 9, 6, 7, 5, 1, 8};
-		sudoku[4] = new int[]{5, 9, 8, 1, 2, 3, 6, 4, 7};
+		sudoku[4] = new int[]{5, 9, 8, 1, 0, 3, 6, 4, 7};
 		sudoku[5] = new int[]{7, 1, 6, 5, 8, 4, 9, 2, 3};
 
 		sudoku[6] = new int[]{6, 7, 9, 4, 5, 8, 1, 3, 2};
-		sudoku[7] = new int[]{4, 5, 2, 3, 1, 6, 8, 7, 9};
+		sudoku[7] = new int[]{4, 5, 2, 3, 1, 6, 0, 7, 9};
 		sudoku[8] = new int[]{8, 3, 1, 7, 9, 2, 4, 6, 5};
 		Sudoku game = new Sudoku(sudoku);
+		game.solve();
+		System.out.println(game.isSolved());
 	}
 
 	public Sudoku() {
@@ -55,8 +56,8 @@ public class Sudoku {
 	}
 
 	public boolean[] candidates(int row, int column) {
-		boolean[] candidates = new boolean[9];
-		for (int i = 0; i < candidates.length; i++) {
+		boolean[] candidates = new boolean[10];
+		for (int i = 1; i < candidates.length; i++) {
 			candidates[i] = true;
 		}
 
@@ -66,19 +67,19 @@ public class Sudoku {
 
 		for (int i = 0; i < house.length; i++) {
 			if (house[i] != 0) {
-				candidates[house[i] - 1] = false;
+				candidates[house[i]] = false;
 			}
 		}
 
 		for (int i = 0; i < rowArray.length; i++) {
 			if (rowArray[i] != 0) {
-				candidates[rowArray[i] - 1] = false;
+				candidates[rowArray[i]] = false;
 			}
 		}
 
 		for (int i = 0; i < columnArray.length; i++) {
 			if (columnArray[i] != 0) {
-				candidates[columnArray[i] - 1] = false;
+				candidates[columnArray[i]] = false;
 			}
 		}
 
@@ -111,7 +112,10 @@ public class Sudoku {
 	}
 
 	//TODO private
-	public void setHiddenSingles() {
+	//TODO find extreme naked singles in which a row in a house is invalidated for a number becuase the same row of
+	// another house requires the number to be placed in it.
+	public boolean hiddenSingles() {
+		boolean changesMade = false;
 		for (int startRow = 0; startRow < 9; startRow += 3) {
 			for (int startColumn = 0; startColumn < 9; startColumn += 3) {
 				for (int i = 1; i <= 9; i++) {
@@ -119,7 +123,7 @@ public class Sudoku {
 					int lastRow = -1, lastColumn = -1;
 					for (int row = 0; row < 3; row++) {
 						for (int column = 0; column < 3; column++) {
-							if (candidates(startRow + row, startColumn + column)[i - 1]) {
+							if (candidates(startRow + row, startColumn + column)[i]) {
 								timesFound++;
 								System.out.println(i);
 								lastRow = row;
@@ -129,18 +133,53 @@ public class Sudoku {
 					}
 					if (timesFound == 1) {
 						board[startRow + lastRow][startColumn + lastColumn] = i;
+						changesMade = true;
 					}
+				}
+			}
+		}
+		return changesMade;
+	}
+
+	public boolean nakedSingles() {
+		boolean changesMade = false;
+		for (int row < this.rows; row++) {
+			for (int column < this.columns; column++) {
+				int numbersFound = 0;
+				for (boolean numPresent : candidates(row, columns)) {
+					if (numPresent)
+						numbersFound++;
+				}
+				if (numbersFound == 1) {
+					for (int i = 1; i <= 9; i++) {
+						if (candidates(row, column)) {
+							board[row][column] = true;
+							changesMade = true;
+							break;
+						}
+					}
+
 				}
 			}
 		}
 	}
 
 	public boolean isSolved() {
-		return isSolved;
+		boolean solved = true;
+		for (int row = 0; row < 9; row++) {
+			for (int column = 0; column < 9; column++) {
+				if (board[row][column] == 0) {
+					solved = false;
+					break;
+					break;
+				}
+			}
+		}
+		return solved;
 	}
 
 	public void solve() {
-		setHiddenSingles();
+		while (!isSolved() && (nakedSingles() || hiddenSingles()));
 		isSolved = true;
 	}
 }
