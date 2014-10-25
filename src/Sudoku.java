@@ -142,33 +142,135 @@ public class Sudoku {
 // }
 
  public boolean hiddenSingles() {
-  boolean changesMade = false;
-  //houses
-  for (int boxRow = 0; boxRow < board.length; boxRow += 3) {
-   for (int boxColumn = 0; boxColumn < board[boxRow].length; boxColumn += 3) {
-    for (int i = 1; i <= 9; i++) {
-     int timesFound = 0;
-     int lastRow = -1;
-     int lastColumn = -1;
-     for (int row = 0; row < 3; row++) {
-      for (int column = 0; column < 3; column++) {
-       if (board[row + boxRow][column +boxColumn] == 0 && candidates(row + boxRow, column + boxColumn)[i]) {
-        timesFound++;
-        lastRow = row + boxRow;
-        lastColumn = column + boxColumn;
-       }
-      }
-     }
-     if (timesFound == 1) {
-       board[lastRow][lastColumn] = i;
-       changesMade = true;
-     }
-    }
-   }
-  }
+	 boolean changesMade = false;
+	 changesMade = houseHiddenSingles();
+
+	 if(rowHiddenSingles()) {
+		 changesMade = true;
+	 }
+
+	 if(colHiddenSingles()) {
+		 changesMade = true;
+	 }
 
   return changesMade;
  }
+
+	public boolean houseHiddenSingles() {
+		boolean changesMade = false;
+		//houses
+		for (int boxRow = 0; boxRow < board.length; boxRow += 3) {
+			for (int boxColumn = 0; boxColumn < board[boxRow].length; boxColumn += 3) {
+				for (int i = 1; i <= 9; i++) {
+					int timesFound = 0;
+					int lastRow = -1;
+					int lastColumn = -1;
+					for (int row = 0; row < 3; row++) {
+						for (int column = 0; column < 3; column++) {
+							if (board[row + boxRow][column +boxColumn] == 0 && candidates(row + boxRow, column + boxColumn)[i]) {
+								timesFound++;
+								lastRow = row + boxRow;
+								lastColumn = column + boxColumn;
+							}
+						}
+					}
+					if (timesFound == 1) {
+						board[lastRow][lastColumn] = i;
+						changesMade = true;
+					}
+				}
+			}
+		}
+		return changesMade;
+	}
+
+	public boolean rowHiddenSingles() {
+		boolean changesMade = false;
+		//TODO use candidates and not value on the board
+		for (int number = 1; number <= 9; number++) {
+			boolean[] numberFoundInRow = new boolean[9];
+			for (int row = 0; row < 9; row++) {
+				for (int numInRow : getRow(row)) {
+					if (numInRow == number) {
+						numberFoundInRow[row] = true;
+					}
+				}
+			}
+			for (int houseRow = 0; houseRow < 9; houseRow += 3) {
+				boolean[] housesWithNumber = new boolean[3];
+				int timesFound = 0;
+				for (int i = 0; i < 3; i++) {
+					if (numberFoundInRow[houseRow + i]) {
+						timesFound++;
+					}
+				}
+				if (timesFound == 2) {
+					housesWithNumber[houseRow / 3] = true;
+				}
+			}
+		}
+
+		return changesMade;
+	}
+
+	public boolean[] rowsWithNumber(int number) {
+		boolean[] response = new boolean[9];
+
+
+
+		return response;
+	}
+
+	public boolean[] rowInHouse
+
+	public boolean colHiddenSingles() {
+		boolean changesMade = false;
+		for (int startColumn = 0; startColumn < board.length; startColumn += 3) {
+			for (int i = 1; i <= 9; i++) {
+				boolean[] foundInColumn = new boolean[3];
+				for (int col = 0; col < 3; col++) {
+					int[] column = getColumn(startColumn + col);
+					for (int k = 0; k < column.length; k++) {
+						if (column[k] == i) {
+							foundInColumn[col] = true;
+						}
+					}
+				}
+				int colsfoundIn = 0;
+				for (int j = 0; j < foundInColumn.length; j++) {
+					if (foundInColumn[j]) {
+						colsfoundIn++;
+					}
+				}
+				if (colsfoundIn == 2) {
+					int onlyNotFoundInColumn = -1;
+					for (int j = 0; j < foundInColumn.length; j++) {
+						if (!foundInColumn[j]) {
+							onlyNotFoundInColumn = j;
+						}
+					}
+					int rowOfBoxWithoutNumber = -1;
+					for (int z = 0; z < 3; z++) {
+						if (isNumberInHouse(onlyNotFoundInColumn, ))
+					}
+				}
+			}
+		}
+		return changesMade;
+	}
+
+	public boolean isNumberInHouse(int column, int row, int number) {
+		boolean isFound = false;
+
+		int[] house = getHouse(column, row);
+
+		for (int num : house) {
+			if (num == number)
+				isFound = true;
+		}
+
+		return isFound;
+	}
 
 // public int[] numbersNotAllowedInRowOrColumn(int row, int column) {
 //  for (int walkRowOfHouses = row / 3 * 3, int column = column * 3 /3; walkRowOfHouses < 3 + row / 3 * 3; walkRowOfHouses++) {
