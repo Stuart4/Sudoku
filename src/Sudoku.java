@@ -141,6 +141,19 @@ public class Sudoku {
 		return changesMade;
 	}
 
+	public int[] numbersNotAllowedInRowOrColumn(int row, int column) {
+		for (int walkRowOfHouses = row / 3 * 3, int column = column * 3 /3; walkRowOfHouses < 3 + row / 3 * 3; walkRowOfHouses++) {
+			for (int rowInHouse = 0; rowInHouse < 3; rowInHouse++) {
+				for (int columnInHouse = 0; columnInHouse < 3; columnInHouse++) {
+					if (board[walkRowOfHouses + rowInHouse][] != 0)
+				}
+			}
+		}
+		for (int walkColumnOfHouses = 0; walkColumnOfHouses < 3; walkColumnOfHouses++) {
+
+		}
+	}
+
 	public boolean nakedSingles() {
 		boolean changesMade = false;
 		for (int row = 0; row < this.rows; row++) {
