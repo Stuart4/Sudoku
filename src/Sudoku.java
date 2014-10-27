@@ -10,12 +10,12 @@ public class Sudoku {
 
 	//creates a Sudoku with an initial board
 	public Sudoku(int[][] board) {
-		this.board = Arrays.copyOf(board, board.length);
+		this.board = board.clone();
 	}
 
 	//returns a copy of the current state of the board
 	public int[][] board() {
-		return Arrays.copyOf(board, board.length);
+		return board.clone();
 	}
 
 	//returns list of candidates for a specific cell. Array contains
@@ -194,21 +194,6 @@ public class Sudoku {
 	//attempts to solve board. exits when solved or no updates made
 	public void solve() {
 		while (!isSolved() && (nakedSingles() || hiddenSingles())) ;
-	}
-
-	public static void main(String[] args) {
-		int[][] sudoku = new int[9][9];
-		sudoku[0] = new int[]{2, 4, 5, 0, 7, 0, 3, 9, 6};
-		sudoku[1] = new int[]{1, 0, 7, 6, 3, 9, 2, 5, 4};
-		sudoku[2] = new int[]{9, 6, 3, 2, 4, 5, 7, 8, 1};
-		sudoku[3] = new int[]{3, 2, 0, 9, 6, 0, 5, 1, 0};
-		sudoku[4] = new int[]{5, 9, 0, 1, 0, 3, 6, 4, 7};
-		sudoku[5] = new int[]{7, 0, 6, 5, 8, 4, 9, 2, 3};
-		sudoku[6] = new int[]{6, 7, 9, 4, 0, 8, 1, 0, 0};
-		sudoku[7] = new int[]{4, 0, 2, 0, 1, 0, 0, 7, 9};
-		sudoku[8] = new int[]{8, 3, 0, 0, 0, 2, 4, 6, 5};
-		Sudoku game = new Sudoku(sudoku);
-		game.solve();
 	}
 
 }
