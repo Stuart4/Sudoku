@@ -165,8 +165,8 @@ public class Sudoku {
 					board[lastRow][lastColumn] = number;
 				}
 			}
-			for (int houseRow = 0; houseRow < 9; houseRow += 9) {
-				for (int houseCol = 0; houseCol < 9; houseCol += 9) {
+			for (int houseRow = 0; houseRow < 9; houseRow += 3) {
+				for (int houseCol = 0; houseCol < 9; houseCol += 3) {
 					int timesFound = 0;
 					int lastRow = -1;
 					int lastColumn = -1;
