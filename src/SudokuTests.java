@@ -140,6 +140,6 @@ public class SudokuTests extends TestCase {
   game.solve();
 
   s = new Sudoku(board);
-  assertTrue(s.isSolved());
+  assertTrue(!s.isSolved());
  }
 }

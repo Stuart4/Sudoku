@@ -1,21 +1,29 @@
-import java.util.Arrays;
 public class Sudoku {
 
 	int[][] board;
 
 	public Sudoku() {
 		board = new int[9][9];
-
 	}
 
 	//creates a Sudoku with an initial board
 	public Sudoku(int[][] board) {
-		this.board = board.clone();
+		this.board = clone(board);
+	}
+
+	public int[][] clone(int[][] input) {
+		int[][] output = new int[input.length][input[0].length];
+		for (int row = 0; row < output.length; row++) {
+			for (int col = 0; col < output[row].length; col++) {
+				output[row][col] = input[row][col];
+			}
+		}
+		return output;
 	}
 
 	//returns a copy of the current state of the board
 	public int[][] board() {
-		return board.clone();
+		return clone(board);
 	}
 
 	//returns list of candidates for a specific cell. Array contains
